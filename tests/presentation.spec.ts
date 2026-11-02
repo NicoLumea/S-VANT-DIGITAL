@@ -10,6 +10,7 @@ for(const width of [320,390,768,1024,1440]) {
       expect(response?.status(),route).toBe(200);
       await expect(page.locator('meta[name=robots]')).toHaveAttribute('content',/noindex/);
       await expect(page.locator('h1')).toHaveCount(1);
+      await expect(page.locator('script:not([src])')).toHaveCount(0);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),route).toBe(true);
       if(route==='/') {
         await expect(page.locator('.concept-card')).toHaveCount(11);

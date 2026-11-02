@@ -32,7 +32,7 @@
 - The standard Playwright Chromium download returned invalid ZIP archives. For local browser verification only, an isolated scratch installation of @sparticuz/chromium 153.0.0 supplied the browser. A temporary local Playwright configuration ran the same tests against Astro preview at port 4321. No fallback browser dependency/configuration is part of the repository.
 - The Cloudflare HTTP-header test is intentionally skipped under the Astro fallback because Astro does not interpret Cloudflare `_headers`. The checked-in default tests target Wrangler on port 8787 and include that test. Confirm actual response headers through CI and the eventual Cloudflare Preview.
 - Early fallback-browser runs failed between browser contexts; removing the fallback binary’s single-process launch argument resolved that issue. The final local run passed all 12 applicable tests.
-- GitHub Actions/Cloudflare build results are remote checks, not inferred from local success.
+- The first GitHub Actions run passed installation, type/build checks, Wrangler validation and 10 browser tests, including HTTP headers. Three interactive tests exposed Astro auto-inlining small scripts that the strict CSP blocked. The build now disables automatic asset inlining; tests also assert that no inline scripts are emitted. The follow-up CI result is reported on the PR.
 - No Cloudflare preview or production deployment was executed. Dashboard integration, private-review Access settings and actual Preview URL validation remain outstanding.
 - Approved logo, company portfolio PDF and playbook were unavailable. Concept 01 remains In Development; source verification and detailed interactive Wix reference inspection remain pending.
 
