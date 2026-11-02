@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../BaseLayout.astro';
+import Brand from '../../components/Brand.astro';
+import ConceptSwitcher from '../../components/presentation/ConceptSwitcher.astro';
+import '../../styles/concepts/modern-corporate.css';
+interface Props {title:string;}
+const {title}=Astro.props;
+const nav=[['Home','/concept-01/'],['Services','/concept-01/services/'],['About','/concept-01/about/'],['Our work','/concept-01/work/']];
+---
+<BaseLayout title={`${title} · Concept 01`}>
+  <ConceptSwitcher current="concept-01" />
+  <div class="corporate">
+    <header class="corporate-header container"><a href="/concept-01/" class="brand-link"><Brand /></a>
+      <nav aria-label="Modern Corporate navigation">{nav.map(([label,url])=><a href={url} aria-current={Astro.url.pathname===url?'page':undefined}>{label}</a>)}<a class="button secondary" href="/concept-01/contact/">Contact demo ↗</a></nav>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="corporate-footer container"><Brand /><p>Concept 01 / Modern Corporate<br />Draft copy from the project brief. Portfolio verification pending.</p><a href="/">Return to all proposals ↗</a></footer>
+  </div>
+</BaseLayout>

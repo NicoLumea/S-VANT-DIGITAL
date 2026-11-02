@@ -1,0 +1,36 @@
+---
+import {concepts} from '../../data/concepts';
+interface Props {current: string;}
+const {current} = Astro.props;
+---
+<aside class="presentation-tools" aria-label="Design review tools">
+  <div class="container review-bar"><a href="/">← Proposal gallery</a><span>Concept 01 · In development</span>
+    <details class="switcher"><summary>Explore designs <span aria-hidden="true">＋</span></summary>
+      <nav aria-label="Choose a concept"><ul>{concepts.map(c=><li>{c.href ? <a href={c.href} aria-current={c.id===current?'true':undefined}>{c.number} / {c.name}<small>{c.status}{c.id===current?' · Current':''}</small></a> : <span>{c.number} / {c.name}<small>{c.status}</small></span>}</li>)}</ul><a href="/compare/">Compare design intentions ↗</a></nav>
+    </details>
+  </div>
+</aside>
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('.switcher').forEach(switcher => {
+    switcher.addEventListener('keydown',event => {
+      if (event.key === 'Escape') { switcher.open = false; switcher.querySelector('summary')?.focus(); }
+    });
+  });
+</script>
+<style>
+.presentation-tools { background: var(--color-navy); color: white; font-size: .75rem; }
+.review-bar { display:flex; align-items:baseline; flex-wrap:wrap; gap: .4rem 1.5rem; padding-block:.7rem; }
+.review-bar > span { color:#cbd5e1; margin-right:auto; }
+.review-bar a { text-decoration:none; }
+.switcher { flex:0 0 auto; max-width:100%; }
+.switcher[open] { flex-basis:100%; }
+summary { min-height:32px; display:flex; align-items:center; gap:2rem; }
+.switcher[open] summary { margin-bottom:.7rem; }
+nav { padding:1rem; border:1px solid #475569; border-radius:4px; }
+ul { list-style:none; padding:0; margin:0 0 1rem; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.6rem; }
+li a,li > span { display:block; padding:.6rem; border-radius:3px; }
+li > span { color:#b7c1d2; }
+li a { background:#1746a2; }
+small { display:block; font-size:.65rem; }
+@media(max-width:767px) { ul { grid-template-columns:1fr; } .review-bar > span { width:100%; order:2; } .switcher { margin-left:auto; } }
+</style>

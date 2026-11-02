@@ -1,0 +1,30 @@
+{
+  "name": "sevant-digital",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "check": "astro check",
+    "preview": "astro preview",
+    "preview:worker": "npm run build && wrangler dev --local",
+    "deploy": "npm run build && wrangler deploy",
+    "deploy:preview": "npm run build && wrangler preview",
+    "check:worker": "wrangler deploy --dry-run",
+    "verify": "npm run check && npm run build && npm run check:worker",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "astro": "7.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@playwright/test": "1.64.1",
+    "typescript": "6.0.3",
+    "wrangler": "4.156.1"
+  }
+}

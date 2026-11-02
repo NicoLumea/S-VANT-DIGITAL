@@ -1,0 +1,25 @@
+---
+import {concepts} from '../../data/concepts';
+import ConceptCard from './ConceptCard.astro';
+---
+<section id="collection" class="collection container" aria-labelledby="collection-title">
+  <div class="section-heading"><div><p class="eyebrow">The collection / 01—11</p><h2 id="collection-title">A direction for every ambition.</h2></div><p>Eleven distinct approaches.<br />A shared Sévant Digital identity.</p></div>
+  <form action="/compare/" method="get" id="gallery-form">
+    <div class="collection-toolbar"><p><span class="dot"></span> 1 foundation to explore <span class="muted-divider">/</span> 10 directions planned</p><button type="submit" class="button secondary" id="compare-button">Compare directions <span aria-hidden="true">↗</span></button></div>
+    <p id="selection-status" class="selection-status" aria-live="polite">Select at least two cards to compare their design intentions.</p>
+    <div class="concept-grid">{concepts.map(concept=><ConceptCard concept={concept} />)}</div>
+  </form>
+</section>
+<script>
+  const form = document.querySelector<HTMLFormElement>('#gallery-form');
+  const button = document.querySelector<HTMLButtonElement>('#compare-button');
+  const status = document.querySelector<HTMLElement>('#selection-status');
+  function updateSelection() {
+    const count = form?.querySelectorAll('input:checked').length ?? 0;
+    if (button) button.disabled = count < 2;
+    if (status) status.textContent = count ? `${count} direction${count === 1 ? '' : 's'} selected. ${count < 2 ? 'Choose one more to compare.' : 'Ready to compare design intentions.'}` : 'Select at least two cards to compare their design intentions.';
+  }
+  form?.addEventListener('change',updateSelection);
+  window.addEventListener('pageshow',updateSelection);
+  updateSelection();
+</script>

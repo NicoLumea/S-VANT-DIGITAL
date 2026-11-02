@@ -1,0 +1,22 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Brand from '../components/Brand.astro';
+import '../styles/presentation.css';
+interface Props { title: string; }
+const {title} = Astro.props;
+---
+<BaseLayout title={title}>
+  <header class="gallery-header container">
+    <a href="/" aria-label="Sévant Digital proposal gallery"><Brand /></a>
+    <nav aria-label="Presentation navigation">
+      <a href="/#collection">The collection</a>
+      <a href="/compare/">Compare directions <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  <main id="main"><slot /></main>
+  <footer class="gallery-footer container">
+    <div><strong>Sévant Digital</strong><p>One identity. Eleven possibilities.</p></div>
+    <p>Design presentation only · Not the official company website.<br />No enquiries, customer data or payments are collected.</p>
+    <span class="eyebrow">Berlin / Digital growth</span>
+  </footer>
+</BaseLayout>
