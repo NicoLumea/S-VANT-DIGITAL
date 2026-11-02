@@ -1,0 +1,12 @@
+---
+import { brand } from '../data/brand';
+---
+<span class="brand">
+  {brand.logo ? <img src={brand.logo} alt={brand.logoAlt} width="210" height="70" /> : <><span>{brand.name}</span><small>Brand asset pending</small></>}
+</span>
+<style>
+.brand { display: inline-flex; flex-direction: column; line-height: 1.2; }
+.brand > span { font-size: 1.1rem; font-weight: 600; letter-spacing: -.03em; }
+.brand small { font-size: .6rem; margin-top: .25rem; font-weight: 400; color: var(--color-text-secondary); }
+.brand img { object-fit: contain; max-width: 210px; }
+</style>

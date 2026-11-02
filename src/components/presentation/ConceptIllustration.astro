@@ -1,0 +1,12 @@
+---
+interface Props { number: string; name: string; }
+const {number,name} = Astro.props;
+---
+<div class:list={['concept-illustration', `illustration-${number}`]} role="img" aria-label={`${name}: conceptual layout study, not a finished website screenshot`}>
+  <div class="mini-window" aria-hidden="true">
+    <div class="mini-nav"><b>SD /</b><span>—— &nbsp; —— &nbsp; ——</span></div>
+    <div class="mini-composition"><div class="mini-type"><span>THE NEXT CHAPTER</span><strong>Different<br />by design.</strong><i></i></div><div class="mini-art"><em></em><em></em><em></em></div></div>
+    <div class="mini-bottom"><span></span><span></span><span></span></div>
+  </div>
+  <span class="study-label">{number} / Layout study</span>
+</div>

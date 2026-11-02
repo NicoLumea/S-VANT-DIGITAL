@@ -1,0 +1,4 @@
+---
+import {company} from '../../../data/company';
+---
+<div class="project-grid">{company.projects.map((p,i)=><article><div class:list={['project-placeholder',{'project-light':i===1}]}><span>PORTFOLIO / 0{i+1}</span><strong>{p.name}</strong><small>Approved imagery pending</small></div><h3>{p.name}</h3><p>{p.status}. Scope, delivery status and outcomes will be added from the company portfolio.</p></article>)}</div>

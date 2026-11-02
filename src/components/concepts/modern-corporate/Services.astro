@@ -1,0 +1,4 @@
+---
+import {company} from '../../../data/company';
+---
+<div class="service-grid">{company.services.map((s,i)=><article><span class="eyebrow">0{i+1}</span><h3>{s.name}</h3><p>{s.description}</p></article>)}</div>

@@ -1,0 +1,58 @@
+---
+import {concepts} from '../../data/concepts';
+import ConceptIllustration from './ConceptIllustration.astro';
+const aspects=[['Navigation','navigation'],['Hero','hero'],['Services','services'],['Portfolio','portfolio'],['Mobile','mobile'],['Interaction','interaction']] as const;
+---
+<section class="comparison-picker"><h2>Choose your directions</h2><p>Compare two or more. Planned directions describe intentions, not completed designs.</p><div class="picker-grid">{concepts.map(c=><label><input type="checkbox" value={c.id} data-pick /> <span>{c.number} / {c.name}<small>{c.status}</small></span></label>)}</div><p id="comparison-status" aria-live="polite"></p></section>
+<div class="comparison-results">{concepts.map(c=><article class="comparison-panel" data-concept={c.id}><ConceptIllustration number={c.number} name={c.name} /><div class="comparison-content"><span class="status">{c.status}</span><h2>{c.name}</h2><p>{c.description}</p><dl>{aspects.map(([label,key])=><div><dt>{label}</dt><dd>{c[key]}</dd></div>)}</dl>{c.href && <a class="button secondary" href={c.href}>Review foundation ↗</a>}<button class="preference-button" type="button" data-prefer={c.id} aria-pressed="false" hidden>Prefer this direction</button></div></article>)}</div>
+<p id="preference-status" role="status">Preferences stay in this browser tab’s review session.</p><button type="button" id="clear-preference" hidden>Clear preference</button>
+<noscript><p>All direction briefs are shown. Enable JavaScript to filter the comparison and keep a local preference.</p></noscript>
+<script>
+  import {concepts} from '../../data/concepts';
+  const validIds=new Set(concepts.map(c=>c.id));
+  const params=new URLSearchParams(location.search);
+  const initial=params.getAll('concept').filter(id=>validIds.has(id));
+  const picks=[...document.querySelectorAll<HTMLInputElement>('[data-pick]')];
+  for(const pick of picks) pick.checked=initial.includes(pick.value);
+  const panels=[...document.querySelectorAll<HTMLElement>('[data-concept]')];
+  function update() {
+    const selected=picks.filter(p=>p.checked).map(p=>p.value);
+    for(const panel of panels) panel.hidden=selected.length<2 || !selected.includes(panel.dataset.concept??'');
+    const status=document.querySelector('#comparison-status');
+    if(status) status.textContent=selected.length<2?'Choose at least two directions to begin.':`Comparing ${selected.length} design intentions. Planned features have not been implemented.`;
+    const query=new URLSearchParams(); selected.forEach(id=>query.append('concept',id));
+    history.replaceState(null,'',`${location.pathname}${query.size?'?'+query.toString():''}`);
+  }
+  picks.forEach(p=>p.addEventListener('change',update)); update();
+  const key='sevant-review-preference';
+  let preferred:string|null=null;
+  let storageAvailable=true;
+  try { preferred=sessionStorage.getItem(key); } catch { storageAvailable=false; }
+  if(!preferred || !validIds.has(preferred)) preferred=null;
+  const buttons=[...document.querySelectorAll<HTMLButtonElement>('[data-prefer]')];
+  const clear=document.querySelector<HTMLButtonElement>('#clear-preference');
+  function renderPreference() {
+    for(const button of buttons) {
+      button.hidden=false;
+      const selected=button.dataset.prefer===preferred;
+      button.setAttribute('aria-pressed',String(selected));
+      button.textContent=selected?'Preferred direction ✓':'Prefer this direction';
+    }
+    if(clear) clear.hidden=!preferred;
+    const name=concepts.find(c=>c.id===preferred)?.name;
+    const status=document.querySelector('#preference-status');
+    if(status) status.textContent=name?`${name} is your preferred direction. Saved ${storageAvailable?'in this browser tab’s session':'only while this page is open (session storage unavailable)'}.`:'Preferences stay in this browser tab’s review session.';
+  }
+  function save(value:string|null) {
+    preferred=value;
+    try { if(value) sessionStorage.setItem(key,value); else sessionStorage.removeItem(key); } catch { storageAvailable=false; }
+    renderPreference();
+  }
+  buttons.forEach(button=>button.addEventListener('click',()=>save(button.dataset.prefer??null)));
+  clear?.addEventListener('click',()=>save(null)); renderPreference();
+</script>
+<style>
+.comparison-picker { padding:25px; border:1px solid var(--color-border); background:var(--color-surface); margin-block:30px; }.comparison-picker h2 { font-size:1.5rem; margin-bottom:10px; }.comparison-picker > p { font-size:.8rem; }.picker-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-block:24px; }.picker-grid label { display:flex; align-items:center; gap:10px; min-height:48px; cursor:pointer; font-size:.8rem; }.picker-grid input { width:18px; height:18px; accent-color:var(--color-blue-medium); flex-shrink:0; }.picker-grid small { display:block; color:var(--color-text-secondary); }.comparison-results { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }.comparison-panel { min-width:0; border:1px solid var(--color-border); }.comparison-content { padding:24px; }.comparison-content h2 { font-size:1.8rem; margin-block:16px; }.comparison-content p { font-size:.85rem; }dl { margin-block:25px; }dl div { padding-block:12px; border-top:1px solid var(--color-border); }dt { font-size:.65rem; text-transform:uppercase; letter-spacing:.1em; color:var(--color-text-secondary); }dd { margin:5px 0 0; font-size:.85rem; }.preference-button { display:block; width:100%; min-height:46px; border:1px solid var(--color-border); background:white; color:var(--color-blue-medium); margin-top:20px; border-radius:4px; }.preference-button[aria-pressed=true] { background:var(--color-blue-light); border-color:var(--color-blue-accent); }#preference-status { margin-top:30px; font-size:.8rem; }#clear-preference { min-height:44px; background:white; border:1px solid var(--color-border); margin-top:12px; padding:8px 16px; }
+@media(max-width:1000px) { .picker-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:767px) { .picker-grid,.comparison-results { grid-template-columns:1fr; }.comparison-picker { padding:20px; } }
+</style>

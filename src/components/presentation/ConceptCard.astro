@@ -1,0 +1,18 @@
+---
+import type { Concept } from '../../data/concepts';
+import ConceptIllustration from './ConceptIllustration.astro';
+interface Props { concept: Concept; }
+const {concept:c} = Astro.props;
+---
+<article class="concept-card" data-status={c.status}>
+  <ConceptIllustration number={c.number} name={c.name} />
+  <div class="card-content">
+    <div class="card-meta"><span>CONCEPT {c.number}</span><span class:list={['status', {active:!!c.href}]}>{c.status}</span></div>
+    <h3>{c.name}</h3><p>{c.description}</p>
+    <ul class="traits">{c.traits.map(trait=><li>{trait}</li>)}</ul>
+    <div class="card-actions">
+      {c.href ? <a href={c.href}>Review foundation <span aria-hidden="true">↗</span></a> : <span class="planned-label">Design coming later</span>}
+      <label class="compare-check"><input type="checkbox" name="concept" value={c.id} aria-label={`Compare ${c.name}`} /> Compare</label>
+    </div>
+  </div>
+</article>

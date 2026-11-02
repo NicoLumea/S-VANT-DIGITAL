@@ -1,0 +1,13 @@
+---
+import Layout from '../../../layouts/concepts/ModernCorporateLayout.astro';
+---
+<Layout title="Contact demonstration"><section class="page-intro container"><p class="eyebrow">Contact / Presentation only</p><h1>Let’s imagine<br />what comes next.</h1><p>This is a demonstration of the contact journey. No personal information is requested, saved or sent. Approved contact details will be added from the company portfolio.</p></section><section class="demo-contact container"><h2>Explore a starting point.</h2><p>Choose a topic to see how the conversation could begin.</p><label for="demo-topic">What would you like to explore?</label><select id="demo-topic"><option value="growth">A connected digital growth strategy</option><option value="visibility">Search visibility and advertising</option><option value="website">A clearer website experience</option></select><button type="button" id="demo-continue" class="button" hidden>Preview next step ↗</button><p id="demo-response" role="status"></p><noscript><p>This demonstration uses JavaScript to preview the next step. No enquiry form is active.</p></noscript></section></Layout>
+<script>
+  const button=document.querySelector<HTMLButtonElement>('#demo-continue');
+  if(button) button.hidden=false;
+  button?.addEventListener('click',()=> {
+    const topic=document.querySelector<HTMLSelectElement>('#demo-topic');
+    const response=document.querySelector<HTMLElement>('#demo-response');
+    if(response && topic) response.textContent=`Demo only: a conversation about ${topic.selectedOptions[0]?.textContent?.toLowerCase()} would start here. Nothing has been submitted.`;
+  });
+</script>
